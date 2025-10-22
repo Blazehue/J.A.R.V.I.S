@@ -1,0 +1,116 @@
+{
+  "general": {
+    "app_name": "Jarvis V2",
+    "version": "2.0.0",
+    "debug_mode": false,
+    "log_level": "INFO"
+  },
+  "voice": {
+    "enabled": true,
+    "wake_word": "jarvis",
+    "continuous_listening": true,
+    "recognition_engine": "google",
+    "recognition_timeout": 5,
+    "phrase_time_limit": 10,
+    "tts_engine": "pyttsx3",
+    "tts_voice": "default",
+    "tts_rate": 175,
+    "tts_volume": 0.9,
+    "energy_threshold": 4000,
+    "dynamic_energy_threshold": true
+  },
+  "personality": {
+    "formality_level": "professional",
+    "wit_enabled": true,
+    "proactive_suggestions": true,
+    "address_user_as": "sir",
+    "greeting_enabled": true,
+    "time_based_greetings": true
+  },
+  "applications": {
+    "common_apps": {
+      "chrome": "chrome.exe",
+      "firefox": "firefox.exe",
+      "edge": "msedge.exe",
+      "vscode": "code.exe",
+      "code": "code.exe",
+      "notepad": "notepad.exe",
+      "explorer": "explorer.exe",
+      "calculator": "calc.exe",
+      "spotify": "spotify.exe"
+    },
+    "close_confirmation": true,
+    "save_prompt_on_close": true
+  },
+  "screenshots": {
+    "default_format": "png",
+    "default_save_path": "%USERPROFILE%\\Pictures\\Jarvis Screenshots",
+    "auto_filename": true,
+    "filename_pattern": "screenshot_%Y_%m_%d_%H_%M_%S",
+    "quality": 95,
+    "show_notification": true
+  },
+  "system": {
+    "confirm_shutdown": true,
+    "confirm_restart": true,
+    "low_battery_warning": 20,
+    "high_cpu_warning": 90,
+    "high_memory_warning": 85
+  },
+  "files": {
+    "search_locations": [
+      "%USERPROFILE%\\Documents",
+      "%USERPROFILE%\\Downloads",
+      "%USERPROFILE%\\Desktop"
+    ],
+    "max_search_results": 50,
+    "search_timeout": 30,
+    "confirm_delete": true,
+    "confirm_delete_multiple": true
+  },
+  "windows": {
+    "animation_enabled": true,
+    "animation_duration": 200,
+    "snap_threshold": 20,
+    "remember_positions": true
+  },
+  "gui": {
+    "theme": "dark",
+    "window_width": 800,
+    "window_height": 600,
+    "always_on_top": false,
+    "minimize_to_tray": true,
+    "start_minimized": false,
+    "show_in_taskbar": true
+  },
+  "security": {
+    "require_confirmation": {
+      "file_deletion": true,
+      "system_shutdown": true,
+      "registry_changes": true,
+      "admin_commands": true
+    },
+    "allowed_operations": {
+      "file_deletion": true,
+      "system_changes": false,
+      "registry_access": false,
+      "network_operations": true
+    }
+  },
+  "shortcuts": {
+    "activate_voice": "Ctrl+Shift+J",
+    "toggle_window": "Ctrl+Alt+J",
+    "quick_screenshot": "Ctrl+Shift+S",
+    "emergency_stop": "Ctrl+Shift+Esc"
+  },
+  "advanced": {
+    "api_keys": {
+      "openai_key": "",
+      "weather_api_key": ""
+    },
+    "cache_enabled": true,
+    "cache_duration": 3600,
+    "auto_update_check": true,
+    "telemetry_enabled": false
+  }
+}
