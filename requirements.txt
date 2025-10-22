@@ -1,0 +1,38 @@
+# Core Dependencies
+# Python 3.8 or higher required
+
+# Speech Recognition & TTS
+SpeechRecognition>=3.10.0
+pyttsx3>=2.90
+pyaudio>=0.2.14
+pvporcupine>=3.0.0  # Wake word detection
+
+# Desktop Automation
+pyautogui>=0.9.54
+pygetwindow>=0.0.9
+psutil>=5.9.6
+pywin32>=306  # Windows API access
+pillow>=10.0.0
+
+# Natural Language Processing
+openai>=1.3.0  # For advanced intent recognition (optional)
+numpy>=1.26.0  # Compatible with Python 3.12
+
+# GUI
+customtkinter>=5.2.0
+pystray>=0.19.5  # System tray
+
+# File Operations
+watchdog>=3.0.0
+
+# Utilities
+requests>=2.31.0
+python-dotenv>=1.0.0
+pyyaml>=6.0.0
+
+# Logging & Monitoring
+colorama>=0.4.6
+
+# Testing (optional)
+pytest>=7.4.0
+pytest-cov>=4.1.0
