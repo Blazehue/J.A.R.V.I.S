@@ -34,16 +34,67 @@ class ApplicationManager:
             executable = self._resolve_app_name(app_name)
             
             if not executable:
-                # Try to find it
+                # Try to find it using Windows search
                 executable = find_executable(app_name)
             
+            # If still not found, try using Windows start command with app name
             if not executable:
-                return {
-                    'success': False,
-                    'message': f"Could not locate '{app_name}'. Please check if it's installed."
-                }
+                # Try launching directly with start command (works for UWP apps and installed apps)
+                try:
+                    # Normalize app name for Windows start command
+                    normalized_name = normalize_app_name(app_name).lower()
+                    
+                    # Map common names to Windows protocol/package names
+                    windows_apps = {
+                        'camera': 'microsoft.windows.camera:',
+                        'calculator': 'calculator:',
+                        'calc': 'calculator:',
+                        'settings': 'ms-settings:',
+                        'store': 'ms-windows-store:',
+                        'mail': 'outlookmail:',
+                        'calendar': 'outlookcal:',
+                        'photos': 'ms-photos:',
+                        'maps': 'bingmaps:',
+                        'weather': 'bingweather:',
+                        'chrome': 'chrome',
+                        'firefox': 'firefox',
+                        'edge': 'msedge',
+                        'notepad': 'notepad',
+                        'wordpad': 'write',
+                        'paint': 'mspaint',
+                        'explorer': 'explorer',
+                        'cmd': 'cmd',
+                        'powershell': 'powershell',
+                    }
+                    
+                    # Check if it's a known Windows app
+                    if normalized_name in windows_apps:
+                        app_to_launch = windows_apps[normalized_name]
+                        subprocess.Popen(f'start {app_to_launch}', shell=True)
+                        time.sleep(0.5)
+                        logger.info(f"Successfully launched: {app_name}")
+                        return {
+                            'success': True,
+                            'message': f"{app_name} launched successfully"
+                        }
+                    
+                    # Try launching with 'start' command anyway
+                    subprocess.Popen(f'start {app_name}', shell=True)
+                    time.sleep(0.5)
+                    logger.info(f"Successfully launched: {app_name}")
+                    return {
+                        'success': True,
+                        'message': f"{app_name} launched successfully"
+                    }
+                    
+                except Exception as launch_error:
+                    logger.error(f"Failed to launch {app_name}: {launch_error}")
+                    return {
+                        'success': False,
+                        'message': f"Could not locate '{app_name}'. Please check if it's installed."
+                    }
             
-            # Launch the application
+            # Launch the application using the found executable
             if executable.endswith('.exe'):
                 subprocess.Popen(executable, shell=True)
             else:

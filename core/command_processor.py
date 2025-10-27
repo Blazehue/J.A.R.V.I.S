@@ -122,11 +122,18 @@ class CommandProcessor:
         target = params.get('target', '')
         result = self.app_manager.launch(target)
         
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='launch_app',
-            details=target if result['success'] else result['message']
-        )
+        if result['success']:
+            response = self.response_generator.generate(
+                'success',
+                intent='launch_app',
+                details=target
+            )
+        else:
+            response = self.response_generator.generate(
+                'error',
+                intent='launch_app',
+                error=result['message']
+            )
         
         return {
             'success': result['success'],
@@ -148,11 +155,18 @@ class CommandProcessor:
         else:
             result = self.app_manager.close(target)
         
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='close_app',
-            details=result.get('message', target)
-        )
+        if result['success']:
+            response = self.response_generator.generate(
+                'success',
+                intent='close_app',
+                details=result.get('message', target)
+            )
+        else:
+            response = self.response_generator.generate(
+                'error',
+                intent='close_app',
+                error=result.get('message', 'Failed to close application')
+            )
         
         return {
             'success': result['success'],
@@ -164,11 +178,18 @@ class CommandProcessor:
         target = params.get('target', '')
         result = self.app_manager.switch_to(target)
         
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='switch_app',
-            details=result.get('message', '')
-        )
+        if result['success']:
+            response = self.response_generator.generate(
+                'success',
+                intent='switch_app',
+                details=result.get('message', '')
+            )
+        else:
+            response = self.response_generator.generate(
+                'error',
+                intent='switch_app',
+                error=result.get('message', 'Failed to switch application')
+            )
         
         return {
             'success': result['success'],
@@ -184,14 +205,17 @@ class CommandProcessor:
             app_list = '\n'.join([f"- {app['name']} ({app['memory_mb']} MB)" 
                                  for app in apps])
             details = f"Running {result['count']} applications:\n{app_list}"
+            response = self.response_generator.generate(
+                'success',
+                intent='list_apps',
+                details=details
+            )
         else:
-            details = result.get('message', 'Error')
-        
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='list_apps',
-            details=details
-        )
+            response = self.response_generator.generate(
+                'error',
+                intent='list_apps',
+                error=result.get('message', 'Failed to list applications')
+            )
         
         return {
             'success': result['success'],
@@ -204,11 +228,18 @@ class CommandProcessor:
     def _execute_screenshot(self, params: Dict) -> Dict:
         result = self.screenshot_manager.capture_full_screen()
         
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='screenshot',
-            details=result.get('message', '')
-        )
+        if result['success']:
+            response = self.response_generator.generate(
+                'success',
+                intent='screenshot',
+                details=result.get('message', '')
+            )
+        else:
+            response = self.response_generator.generate(
+                'error',
+                intent='screenshot',
+                error=result.get('message', 'Failed to capture screenshot')
+            )
         
         return {
             'success': result['success'],
@@ -220,11 +251,18 @@ class CommandProcessor:
     def _execute_screenshot_window(self, params: Dict) -> Dict:
         result = self.screenshot_manager.capture_window()
         
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='screenshot',
-            details=result.get('message', '')
-        )
+        if result['success']:
+            response = self.response_generator.generate(
+                'success',
+                intent='screenshot',
+                details=result.get('message', '')
+            )
+        else:
+            response = self.response_generator.generate(
+                'error',
+                intent='screenshot',
+                error=result.get('message', 'Failed to capture window screenshot')
+            )
         
         return {
             'success': result['success'],
@@ -242,11 +280,18 @@ class CommandProcessor:
         else:
             result = {'success': False, 'message': 'No volume value or direction specified'}
         
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='volume',
-            details=result.get('message', '')
-        )
+        if result['success']:
+            response = self.response_generator.generate(
+                'success',
+                intent='volume',
+                details=result.get('message', '')
+            )
+        else:
+            response = self.response_generator.generate(
+                'error',
+                intent='volume',
+                error=result.get('message', 'Failed to adjust volume')
+            )
         
         return {
             'success': result['success'],
@@ -257,11 +302,18 @@ class CommandProcessor:
     def _execute_mute(self, params: Dict) -> Dict:
         result = self.system_controller.mute()
         
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='mute',
-            details=result.get('message', '')
-        )
+        if result['success']:
+            response = self.response_generator.generate(
+                'success',
+                intent='mute',
+                details=result.get('message', '')
+            )
+        else:
+            response = self.response_generator.generate(
+                'error',
+                intent='mute',
+                error=result.get('message', 'Failed to mute')
+            )
         
         return {
             'success': result['success'],
@@ -286,14 +338,18 @@ class CommandProcessor:
                 details += f"battery at {battery['percent']:.0f}%. "
             
             details += f"You have {disk['free']} of free storage remaining."
+            
+            response = self.response_generator.generate(
+                'success',
+                intent='system_info',
+                details=details
+            )
         else:
-            details = result.get('message', 'Error')
-        
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='system_info',
-            details=details
-        )
+            response = self.response_generator.generate(
+                'error',
+                intent='system_info',
+                error=result.get('message', 'Failed to get system info')
+            )
         
         return {
             'success': result['success'],
@@ -348,11 +404,18 @@ class CommandProcessor:
         target = params.get('target', '')
         result = self.file_manager.open_file(target)
         
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='open_file',
-            details=result.get('message', '')
-        )
+        if result['success']:
+            response = self.response_generator.generate(
+                'success',
+                intent='open_file',
+                details=result.get('message', '')
+            )
+        else:
+            response = self.response_generator.generate(
+                'error',
+                intent='open_file',
+                error=result.get('message', 'Failed to open file')
+            )
         
         return {
             'success': result['success'],
@@ -375,14 +438,18 @@ class CommandProcessor:
                     details += "\n(Showing first 5 results)"
             else:
                 details = f"I couldn't find any files matching '{query}'"
+            
+            response = self.response_generator.generate(
+                'success',
+                intent='find_files',
+                details=details
+            )
         else:
-            details = result.get('message', 'Error')
-        
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='find_files',
-            details=details
-        )
+            response = self.response_generator.generate(
+                'error',
+                intent='find_files',
+                error=result.get('message', 'Failed to search for files')
+            )
         
         return {
             'success': result['success'],
@@ -395,11 +462,18 @@ class CommandProcessor:
         name = params.get('name', '')
         result = self.file_manager.create_folder(name)
         
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='create_folder',
-            details=result.get('message', '')
-        )
+        if result['success']:
+            response = self.response_generator.generate(
+                'success',
+                intent='create_folder',
+                details=result.get('message', '')
+            )
+        else:
+            response = self.response_generator.generate(
+                'error',
+                intent='create_folder',
+                error=result.get('message', 'Failed to create folder')
+            )
         
         return {
             'success': result['success'],
@@ -411,11 +485,18 @@ class CommandProcessor:
         target = params.get('target', '')
         result = self.file_manager.delete_file(target)
         
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='delete_file',
-            details=result.get('message', '')
-        )
+        if result['success']:
+            response = self.response_generator.generate(
+                'success',
+                intent='delete_file',
+                details=result.get('message', '')
+            )
+        else:
+            response = self.response_generator.generate(
+                'error',
+                intent='delete_file',
+                error=result.get('message', 'Failed to delete file')
+            )
         
         return {
             'success': result['success'],
@@ -427,11 +508,18 @@ class CommandProcessor:
     def _execute_maximize(self, params: Dict) -> Dict:
         result = self.window_manager.maximize_window()
         
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='maximize',
-            details=result.get('message', '')
-        )
+        if result['success']:
+            response = self.response_generator.generate(
+                'success',
+                intent='maximize',
+                details=result.get('message', '')
+            )
+        else:
+            response = self.response_generator.generate(
+                'error',
+                intent='maximize',
+                error=result.get('message', 'Failed to maximize window')
+            )
         
         return {
             'success': result['success'],
@@ -442,11 +530,18 @@ class CommandProcessor:
     def _execute_minimize(self, params: Dict) -> Dict:
         result = self.window_manager.minimize_window()
         
-        response = self.response_generator.generate(
-            'success' if result['success'] else 'error',
-            intent='minimize',
-            details=result.get('message', '')
-        )
+        if result['success']:
+            response = self.response_generator.generate(
+                'success',
+                intent='minimize',
+                details=result.get('message', '')
+            )
+        else:
+            response = self.response_generator.generate(
+                'error',
+                intent='minimize',
+                error=result.get('message', 'Failed to minimize window')
+            )
         
         return {
             'success': result['success'],
