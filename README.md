@@ -1,4 +1,4 @@
-# Jarvis V2 - Desktop AI Assistant 🤖
+# Jarvis V2 - Desktop AI Assistant 
 (Screenshots Addition WIP)
 <div align="center">
 
